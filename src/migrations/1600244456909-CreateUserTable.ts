@@ -12,7 +12,9 @@ export class CreateUserTable1600244456909 implements MigrationInterface {
             gender char(1),
             profile_image_url text default null,
             push_enabled boolean default null,
-            banner_image_url text default null
+            banner_image_url text default null,
+            created_at timestamp not null default (current_timestamp),
+            updated_at timestamp not null default (current_timestamp)
         )`)
     }
 
