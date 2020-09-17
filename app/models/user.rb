@@ -6,12 +6,27 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable
 
   has_many :access_grants,
-          class_name: 'Doorkeeper::AccessGrant',
-          foreign_key: :resource_owner_id,
-          dependent: :delete_all # or :destroy if you need callbacks
+    class_name: 'Doorkeeper::AccessGrant',
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all # or :destroy if you need callbacks
 
   has_many :access_tokens,
-          class_name: 'Doorkeeper::AccessToken',
-          foreign_key: :resource_owner_id,
-          dependent: :delete_all # or :destroy if you need callbacks
+    class_name: 'Doorkeeper::AccessToken',
+    foreign_key: :resource_owner_id,
+    dependent: :delete_all # or :destroy if you need callbacks
+
+  has_attached_file :avatar, :styles => { large: '500x500#', medium: '150x150#' thumb: '50x50#', small: '80x80#' }, :default_url => '/images/user_icon.png'
+	validates_attachment :avatar, content_type: { content_type: ['image/jpeg', 'image/gif', 'image/png'] }
+
+  has_attached_file :banner, styles: { medium: '1500x>' }, default_url: '/images/default_banner.jpg'
+  validates_attachment :banner, content_type: { content_type: ['image/jpeg', 'image/gif', 'image/png'] }
+
+  def render
+    {
+      email: self.email,
+      username: self.username,
+      description: self.description,
+      avatar:
+    }
+  end
 end
