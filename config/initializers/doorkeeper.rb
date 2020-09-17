@@ -6,11 +6,12 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator do
-    raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
-    # Put your resource owner authentication logic here.
-    # Example implementation:
-    #   User.find_by(id: session[:user_id]) || redirect_to(new_user_session_url)
+  resource_owner_from_credentials do |routes|
+    user = User.find_by_email(request.params[:username])
+
+    if user and user.authenticate(request.params[:password])
+      user
+    end
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -93,7 +94,7 @@ Doorkeeper.configure do
   # Access token expiration time (default: 2 hours).
   # If you want to disable expiration, set this to `nil`.
   #
-  # access_token_expires_in 2.hours
+  access_token_expires_in 1.day
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. In case the block returns `nil` value Doorkeeper fallbacks to
@@ -213,7 +214,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter confirmation: true (default: false) if you want to enforce ownership of
@@ -344,7 +345,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  # grant_flows %w[authorization_code client_credentials]
+  grant_flows %w[password]
 
   # Allows to customize OAuth grant flows that +each+ application support.
   # You can configure a custom block (or use a class respond to `#call`) that must
@@ -487,3 +488,6 @@ Doorkeeper.configure do
   #
   # realm "Doorkeeper"
 end
+
+Doorkeeper::OAuth::TokenResponse.send :prepend, CustomTokenResponse
+Doorkeeper::OAuth::ErrorResponse.send :prepend, CustomTokenErrorResponse
