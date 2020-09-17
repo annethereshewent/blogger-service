@@ -47,6 +47,9 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
 
 
+  config.debug_exception_response_format = :api
+
+
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 
