@@ -9,7 +9,7 @@ Doorkeeper.configure do
   resource_owner_from_credentials do |routes|
     user = User.find_by_email(request.params[:username])
 
-    if user and user.authenticate(request.params[:password])
+    if user and user.valid_password?(request.params[:password])
       user
     end
   end
@@ -512,9 +512,9 @@ Doorkeeper::JWT.configure do
 
   # Optionally set additional headers for the JWT. See
   # https://tools.ietf.org/html/rfc7515#section-4.1
-  token_headers do |opts|
-    { kid: opts[:application][:uid] }
-  end
+  # token_headers do |opts|
+  #   { kid: opts[:application][:uid] }
+  # end
 
   # Use the application secret specified in the access grant token. Defaults to
   # `false`. If you specify `use_application_secret true`, both `secret_key` and

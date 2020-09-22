@@ -33,7 +33,7 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost:3006' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {:address => "localhost", :port => 1025}
 
@@ -48,6 +48,15 @@ Rails.application.configure do
 
 
   config.debug_exception_response_format = :api
+
+  Rails.application.config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins '*'
+      resource '*',
+        headers: :any,
+        methods: %i(get post put patch delete options head)
+    end
+  end
 
 
   # Raises error for missing translations.
