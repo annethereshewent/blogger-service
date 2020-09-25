@@ -13,11 +13,9 @@ class Api::V1::Users::ConfirmationsController < Devise::ConfirmationsController
   def show
     super do |resource|
       if resource.errors.empty?
-        set_flash_message(:notice, :confirmed) if is_flashing_format?
-        return redirect_to root_path
+        return redirect_to ENV["BLOGGER_CLIENT_URL"]
       else
-        flash[:notice] = "Confirmation token is invalid"
-        return redirect_to root_path
+        return redirect_to ENV["BLOGGER_CLIENT_URL"]
       end
     end
   end
