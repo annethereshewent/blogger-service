@@ -13,6 +13,8 @@ Rails.application.routes.draw do
           confirmations: 'api/v1/users/confirmations'
         }
 
+        get ':id/confirmations/status' => 'users#confirmation_status'
+
         get '/dashboard' => 'dashboard#dashboard'
       end
 

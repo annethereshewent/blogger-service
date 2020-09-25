@@ -23,6 +23,7 @@ class User < ApplicationRecord
 
   def render
     {
+      id: self.id,
       email: self.email,
       username: self.username,
       description: self.description,
@@ -30,7 +31,8 @@ class User < ApplicationRecord
       avatar_medium: self.avatar.url(:medium),
       avatar_small: self.avatar.url(:small),
       avatar_thumb: self.avatar.url(:thumb),
-      gender: self.gender
+      gender: self.gender,
+      confirmed_at: self.confirmed_at
     }
   end
 end
